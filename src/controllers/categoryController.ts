@@ -32,8 +32,8 @@ const CategoryController = {
     },
     getAllPaginate: async (req: Request, res: Response): Promise<void> => {
         try {
-            const page = parseInt(req.params.page, 10);
-            const limit = parseInt(req.params.limit, 10);
+            const page = parseInt(req.params.page, 5);
+            const limit = parseInt(req.params.limit, 5);
 
             const categories = await Category.find()
                 .skip((page - 1) * limit)

@@ -8,8 +8,13 @@ const ProductController = {
                 name: req.body.name,
                 price: req.body.price,
                 description: req.body.description ? req.body.description : '',
-                category: req.body.category
+                categoryId: req.body.categoryId
             };
+
+            if (!product.name || !product.price || !product.categoryId) {
+                res.status(400).json({ msg: "Campos obrigatórios faltando" });
+                return;
+            }
 
             const response = await Product.create(product);
 
@@ -24,7 +29,7 @@ const ProductController = {
     },
     getAll: async (req: Request, res: Response): Promise<void> => {
         try {
-            const product = await Product.find();
+            const product = await Product.find().populate("categoryId", 'name');
 
             res.json(product);
         } catch (error) {
@@ -34,12 +39,13 @@ const ProductController = {
     },
     getAllPaginate: async (req: Request, res: Response): Promise<void> => {
         try {
-            const page = parseInt(req.params.page, 10);
-            const limit = parseInt(req.params.limit, 10);
+            const page = parseInt(req.params.page, 5);
+            const limit = parseInt(req.params.limit, 5);
 
             const produtos = await Product.find()
                 .skip((page - 1) * limit)
-                .limit(limit);
+                .limit(limit)
+                .populate('categoryId', 'name');
 
             const totalProdutos = await Product.countDocuments();
 
@@ -56,7 +62,7 @@ const ProductController = {
     get: async (req: Request, res: Response): Promise<void> => {
         try {
             const id = req.params.id;
-            const produto = await Product.findById(id);
+            const produto = await Product.findById(id).populate('categoryId', 'name');;
 
             if (!produto) {
                 res.status(404).json({ msg: "Produto não encontrada" });
@@ -98,7 +104,7 @@ const ProductController = {
                 name: req.body.name,
                 price: req.body.price,
                 description: req.body.description ? req.body.description : '',
-                category: req.body.category
+                categoryId: req.body.categoryId
             };
 
 
@@ -111,7 +117,7 @@ const ProductController = {
 
             res.status(200).json({
                 msg: "Produto atualizado com sucesso",
-                category: updateProduct
+                categoryId: updateProduct
             });
         } catch (error) {
             console.log(error);

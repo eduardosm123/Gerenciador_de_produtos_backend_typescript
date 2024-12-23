@@ -1,11 +1,11 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 import { categorySchema, ICategoria } from './Category';
 
 interface IProduct extends Document {
     name: String,
     price: Number,
     description?: String,
-    category: ICategoria
+    categoryId: ICategoria
 }
 
 
@@ -22,9 +22,10 @@ const productSchema = new Schema<IProduct>({
         type: String,
         required: false
     },
-    category: {
-        type: categorySchema,
-        required: true
+    categoryId: {
+       type: Schema.Types.ObjectId,
+       ref: 'Category',
+       required: true
     },
 }, { timestamps: true });
 

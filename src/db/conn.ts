@@ -10,6 +10,7 @@ async function main() {
         console.log("Conectado ao banco");
     } catch (err) {
         console.log(err);
+        console.log(`${MONGO_CONNECT}`)
     }
 }
 

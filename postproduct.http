@@ -1,0 +1,12 @@
+POST http://localhost:3000/api/product/
+Content-Type: application/json
+
+ {
+      "name": "AMEIXA",
+      "price": 18.70,
+      "description": "GOURMET",
+      "categoryId": "675cc8e4be1c17f9fcb35ff9"
+ }
+ 
+
+ 
