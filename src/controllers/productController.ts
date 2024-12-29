@@ -13,6 +13,7 @@ const ProductController = {
 
             if (!product.name || !product.price || !product.categoryId) {
                 res.status(400).json({ msg: "Campos obrigatórios faltando" });
+                
                 return;
             }
 

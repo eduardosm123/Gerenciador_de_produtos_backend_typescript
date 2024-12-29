@@ -1,6 +1,6 @@
 import { Category } from "../models/Category";
 import { Request, Response } from "express";
-
+const { Product } = require('../models/Product');
 const CategoryController = {
     create: async (req: Request, res: Response): Promise<void> => {
         try {
@@ -77,11 +77,20 @@ const CategoryController = {
                 return
             }
 
+            const produtoComCategoria = await Product.find({ categoryId: id })
+            if (produtoComCategoria.length > 0) {
+            
+                res.status(400).json({
+                    status: 400,
+                    msg: "não é possivel deletar. Existem produtos associados a esta categoria"
+                })
+                return
+            }
             const deleteCategory = await Category.findByIdAndDelete(id);
 
-            res.status(200).json({
+            res.json({
                 deleteCategory,
-                msg: "Categoria foi removida com sucesso"
+                status: 200
             });
         } catch (error) {
             console.log(error);
