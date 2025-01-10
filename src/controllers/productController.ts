@@ -1,19 +1,29 @@
 const { Product } = require('../models/Product');
-import { Request, Response } from "express";
+import { Request, Response } from "express"; 
+import fs from "fs";
+import path from "path";
 
 const ProductController = {
-    create: async (req: Request, res: Response): Promise<void> => {
+    post: async (req: Request, res: Response): Promise<void> => {
         try {
+
+            console.log(req)
+            if (!req.file) {
+                res.status(400).json({ msg: 'imagem obrigatoria para cadastro do produto.' })
+                return
+            }
             const product = {
                 name: req.body.name,
                 price: req.body.price,
                 description: req.body.description ? req.body.description : '',
+                image: req.file.filename,
                 categoryId: req.body.categoryId
             };
 
+            // remove a imagem que foi guarda durante o middleware
             if (!product.name || !product.price || !product.categoryId) {
                 res.status(400).json({ msg: "Campos obrigatórios faltando" });
-                
+                fs.unlinkSync(`uploads/${req.file.filename}`);
                 return;
             }
 
@@ -25,6 +35,9 @@ const ProductController = {
             })
         } catch (error) {
             console.log(error);
+            if (req.file) {
+                fs.unlinkSync(`uploads/${req.file.filename}`);
+            }
             res.status(500).json({ msg: "Erro ao criar produto" });
         }
     },
@@ -75,21 +88,30 @@ const ProductController = {
             console.log(error)
             res.status(500).json({ msg: "Erro ao buscar o produto" });
         }
-    }, 
+    },
     delete: async (req: Request, res: Response): Promise<void> => {
         try {
             const id = req.params.id;
-            const produto = await Product.findById(id);
+            const existingProduct = await Product.findById(id);
 
-            if (!produto) {
+            if (!existingProduct) {
                 res.status(404).json({ msg: "Produto não encontrada" })
                 return
+            }
+
+            // remove a imagem antiga
+            if (existingProduct.image) {
+                const imagePath = path.resolve(__dirname, '../../uploads', existingProduct.image);
+
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath)
+                }
             }
 
             const deleteProduto = await Product.findByIdAndDelete(id);
 
             res.status(200).json({
-                deleteProduto,
+                existingProduct,
                 msg: "Produto foi removido com sucesso"
             });
         } catch (error) {
@@ -101,11 +123,28 @@ const ProductController = {
         try {
             const id = req.params.id;
 
+            // verificacao se produto existe
+            const existingProduct = await Product.findById(id);
+
+            if (!existingProduct) {
+                res.status(404).json({ msg: "Produto não encontrado" })
+                return;
+            }
+
+            // remove a imagem antiga
+            if (req.file && existingProduct.image) {
+                const oldImagePath = path.resolve(__dirname, '../../uploads', existingProduct.image);
+                if (fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath);
+                }
+            }
+
             const product = {
                 name: req.body.name,
                 price: req.body.price,
                 description: req.body.description ? req.body.description : '',
-                categoryId: req.body.categoryId
+                categoryId: req.body.categoryId,
+                image: req.file ? req.file.filename : existingProduct.image,
             };
 
 

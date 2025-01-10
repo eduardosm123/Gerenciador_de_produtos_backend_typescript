@@ -1,13 +1,14 @@
 import { Router, Request, Response } from 'express';
 import ProductController from '../controllers/productController';
+import { upload } from '../middleware/upload';
 
 const router = Router(); 
 
-router.route("/product").post((req: Request, res: Response) => ProductController.create(req, res));
 
-router.route("/product").get((req: Request, res: Response) => ProductController.getAll(req, res))
-router.route("/product/:page&:limit").get((req: Request, res: Response) => ProductController.getAllPaginate(req, res))
-router.route("/product/:id").get((req: Request, res: Response) => ProductController.get(req, res));
-router.route("/product/:id").delete((req: Request, res: Response) => ProductController.delete(req, res));
-router.route("/product/:id").put((req: Request, res: Response) => ProductController.update(req, res));
+router.post("/product", upload, ProductController.post);
+router.get("/product", ProductController.getAll);
+router.get("/product/:page&:limit", ProductController.getAllPaginate);
+router.get("/product/:id", ProductController.get);
+router.delete("/product/:id", ProductController.delete);
+router.put("/product/:id", upload, ProductController.update);
 module.exports = router;

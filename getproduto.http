@@ -1,4 +1,4 @@
-GET http://localhost:3000/api/product/
+DELETE http://localhost:3000/api/product/6775c5b5582b19666ddd794c
 Content-Type: application/json
 
  

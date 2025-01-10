@@ -5,6 +5,7 @@ interface IProduct extends Document {
     name: String,
     price: Number,
     description?: String,
+    image: String,
     categoryId: ICategoria
 }
 
@@ -21,6 +22,10 @@ const productSchema = new Schema<IProduct>({
     description: {
         type: String,
         required: false
+    },
+    image: {
+        type: String,
+        required: true
     },
     categoryId: {
        type: Schema.Types.ObjectId,
