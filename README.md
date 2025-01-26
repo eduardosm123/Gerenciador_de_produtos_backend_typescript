@@ -5,6 +5,8 @@
 - Não se esqueça de criar um .env com a string de conexão de nome MONGO_CONNECT
 - Para executar localmente a aplicação execute o comando npm start
 
+# Comando para execução:
+```npm start```
 
 ## Tecnologia
 - Typescript
