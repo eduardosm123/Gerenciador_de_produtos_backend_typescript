@@ -96,7 +96,8 @@
 | `name` | `String` |  **Obrigatorio**. Nome do produto | 
 | `price` | `Number` |  **Obrigatorio**. Preço do produto | 
 | `description` | `String` |  Descrição do produto | 
-| `category` | `Category` |  **Obrigatorio**. Nome da categoria | 
+| `categoryId` | `String` |  **Obrigatorio**. Id da categoria | 
+| `image` | `file` |  **Obrigatorio**. Imagem do produto |
 
 #### Deletar produto
 
@@ -115,4 +116,5 @@
 | `name` | `String` |  **Obrigatorio**. Nome do produto | 
 | `price` | `Number` |  **Obrigatorio**. Preço do produto | 
 | `description` | `String` |  Descrição do produto | 
-| `category` | `Category` |  **Obrigatorio**. Nome da categoria | 
+| `categoryId` | `String` |  **Obrigatorio**. Id da categoria|
+| `image` | `file` |  **Obrigatorio**. Imagem do produto | 
