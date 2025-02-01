@@ -1,5 +1,5 @@
 
-# API CRUD básico
+# API CRUD  
 
 - Esse projeto é uma api que permite realizar um CRUD de produtos e categorias.   
 - Não se esqueça de criar um .env com a string de conexão de nome MONGO_CONNECT
